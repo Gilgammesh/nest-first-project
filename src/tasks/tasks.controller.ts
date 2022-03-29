@@ -1,44 +1,30 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Body,
-  Param,
-  Query,
-} from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { TasksService } from './tasks.service';
 import { Task } from './schemas/task.schema';
 
 @Controller('tasks')
 export class TasksController {
-  constructor(private readonly tasksService: TasksService) {}
+	constructor(private readonly tasksService: TasksService) {}
 
-  @Get()
-  async getTasks(): Promise<Task[]> {
-    return this.tasksService.getAll();
-  }
+	@Get()
+	async getTasks(): Promise<Task[]> {
+		return this.tasksService.getAll();
+	}
 
-  // @Get(':id')
-  // getTask(@Param('id') id: string): Task {
-  //   return this.tasksService.getTask(parseInt(id, 10));
-  // }
+	@Get(':id')
+	async getTask(@Param('id') id: string): Promise<Task> {
+		return this.tasksService.get(id);
+	}
 
-  @Post()
-  async createTask(@Body() task: CreateTaskDto): Promise<Task> {
-    const newTask = await this.tasksService.create(task);
-    return newTask;
-  }
+	@Post()
+	async createTask(@Body() task: CreateTaskDto): Promise<Task> {
+		const newTask = await this.tasksService.create(task);
+		return newTask;
+	}
 
-  @Put()
-  updateTask(): string {
-    return 'Tarea actualizada';
-  }
-
-  @Delete(':id')
-  deleteTask(@Param('id') id: number): string {
-    return `Tarea eliminada: ${id}`;
-  }
+	@Delete(':id')
+	async deleteTask(@Param('id') id: string): Promise<boolean> {
+		return await this.tasksService.delete(id);
+	}
 }

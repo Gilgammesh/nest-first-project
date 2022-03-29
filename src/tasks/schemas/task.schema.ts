@@ -3,19 +3,19 @@ import { Document } from 'mongoose';
 
 export type TaskDocument = Task & Document;
 
-@Schema()
+@Schema({ timestamps: true, versionKey: false })
 export class Task {
-  @Prop()
-  id: number;
+	@Prop({ unique: true })
+	id: number;
 
-  @Prop()
-  title: string;
+	@Prop()
+	title: string;
 
-  @Prop()
-  description: string;
+	@Prop()
+	description: string;
 
-  @Prop()
-  done: boolean;
+	@Prop()
+	done: boolean;
 }
 
 export const TaskSchema = SchemaFactory.createForClass(Task);
